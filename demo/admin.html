@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n-tag="admin.title">管理后台 · QR2WebUpload</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="admin-page">
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="sidebar-brand" href="index.html">
+        <span class="brand-mark">Q2</span>
+        <span class="brand-text">QR2WebUpload</span>
+      </a>
+      <div class="sidebar-label" data-i18n="admin.workbench">工作台</div>
+      <nav class="nav">
+        <button class="nav-item active" data-view="subjects">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span data-i18n="admin.navSubjects">研究对象</span>
+        </button>
+        <button class="nav-item" data-view="help">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.8.4-1 1-1 1.7M12 17h.01"/></svg>
+          <span data-i18n="admin.navHelp">使用说明</span>
+        </button>
+      </nav>
+      <div class="sidebar-foot">
+        <div id="modeBadge" class="mode-badge">本地演示模式</div>
+        <div class="sidebar-foot-note" data-i18n="admin.footNote">静态站点 · 无后端依赖</div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="admin-topbar">
+        <label class="lang-switch">
+          <span data-i18n="common.language">语言</span>
+          <select data-lang-select aria-label="Language"></select>
+        </label>
+      </div>
+      <div id="configBanner" class="banner banner-warn" hidden></div>
+
+      <section id="view-subjects" class="view">
+        <header class="page-head">
+          <div>
+            <div class="eyebrow" data-i18n="admin.eyebrow">ADMIN CONSOLE</div>
+            <h1 data-i18n="admin.h1">研究对象</h1>
+            <p data-i18n="admin.lead">创建受访者档案、生成专属二维码，按日期查看上传的手册照片。</p>
+          </div>
+          <button id="btnNewSubject" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            <span data-i18n="admin.newSubject">新建研究对象</span>
+          </button>
+        </header>
+
+        <div class="stats">
+          <div class="stat-card"><span class="stat-label" data-i18n="admin.statSubjects">研究对象</span><strong id="statSubjects">0</strong><span class="stat-unit" data-i18n="admin.unitPersons">位</span></div>
+          <div class="stat-card"><span class="stat-label" data-i18n="admin.statPhotos">累计照片</span><strong id="statPhotos">0</strong><span class="stat-unit" data-i18n="admin.unitPhotos">张</span></div>
+          <div class="stat-card"><span class="stat-label" data-i18n="admin.statToday">今日上传</span><strong id="statToday">0</strong><span class="stat-unit" data-i18n="admin.unitPhotos">张</span></div>
+          <div class="stat-card stat-accent"><span class="stat-label" data-i18n="admin.statSource">数据来源</span><strong id="statMode" class="stat-text">本地</strong><span class="stat-unit" data-i18n="admin.unitMode">模式</span></div>
+        </div>
+
+        <div class="toolbar">
+          <input id="searchInput" class="input search-input" type="search" data-i18n-ph="admin.searchPh" placeholder="搜索编号或称呼…">
+          <span id="subjectCount" class="muted"></span>
+        </div>
+
+        <div id="subjectGrid" class="subject-grid"></div>
+      </section>
+
+      <section id="view-subject" class="view" hidden>
+        <button id="btnBack" class="btn btn-ghost btn-back" data-i18n="admin.back">← 返回研究对象列表</button>
+        <header class="page-head">
+          <div>
+            <div id="detailId" class="eyebrow">P001</div>
+            <h1 id="detailName">研究对象</h1>
+            <p id="detailNote"></p>
+          </div>
+          <div class="head-actions">
+            <button id="btnDetailQR" class="btn btn-ghost" data-i18n="admin.detailQR">查看二维码</button>
+            <button id="btnDetailOpen" class="btn btn-primary" data-i18n="admin.detailOpen">打开上传页</button>
+          </div>
+        </header>
+        <div id="detailMeta" class="detail-meta"></div>
+        <div id="dateGroups" class="date-groups"></div>
+      </section>
+
+      <section id="view-help" class="view" hidden>
+        <header class="page-head">
+          <div>
+            <div class="eyebrow" data-i18n="admin.helpEyebrow">DOCUMENTATION</div>
+            <h1 data-i18n="admin.helpH1">使用说明</h1>
+            <p data-i18n="admin.helpLead">本地演示与跨设备云端部署的配置方式。</p>
+          </div>
+        </header>
+
+        <div class="help-grid">
+          <article class="help-card">
+            <h3 data-i18n="admin.help1Title">1. 快速本地演示</h3>
+            <p data-i18n="admin.help1Body">默认使用浏览器本地存储（localStorage），打开页面即可创建研究对象、生成二维码、上传照片。适合在同一台电脑上演示完整界面流程。</p>
+            <p class="help-hint" data-i18n="admin.help1Hint">注意：本地模式下手机扫码上传的数据只保存在手机浏览器里，不会同步到电脑后台。</p>
+          </article>
+
+          <article class="help-card">
+            <h3 data-i18n="admin.help2Title">2. 开启跨设备同步</h3>
+            <div data-i18n-html="admin.help2Steps">
+              <ol>
+                <li>在 Supabase 新建项目，进入 SQL Editor 执行仓库中的 <code>supabase.sql</code>。</li>
+                <li>打开 <code>js/config.js</code>，将 <code>mode</code> 改为 <code>'supabase'</code>，填入 <code>supabaseUrl</code> 与 <code>supabaseAnonKey</code>。</li>
+                <li>将 <code>siteBaseUrl</code> 填为 GitHub Pages 访问地址（以 <code>/</code> 结尾），例如 <code>https://用户名.github.io/仓库名/demo/</code>。</li>
+                <li>提交到 GitHub，在 Settings → Pages 中选择分支根目录（若 demo 在子目录，访问 <code>/demo/</code>）。</li>
+              </ol>
+            </div>
+            <p class="help-hint" data-i18n="admin.help2Hint">anon key 可以公开在前端；service_role key 绝不可写入前端。演示策略允许匿名读写，正式研究请增加登录与行级安全策略。</p>
+          </article>
+
+          <article class="help-card">
+            <h3 data-i18n="admin.help3Title">3. 二维码与参数</h3>
+            <div data-i18n-html="admin.help3Body">
+              <p>每个研究对象自动获得形如 <code>P001</code> 的编号。二维码指向 <code>upload.html?pid=P001</code>，扫码后页面自动锁定研究对象，无需手动输入。</p>
+              <p>如需按天区分，可在链接后追加 <code>&amp;day=3</code>（当前演示仅记录，不参与归档）。</p>
+            </div>
+          </article>
+
+          <article class="help-card">
+            <h3 data-i18n="admin.help4Title">4. 拍摄时间与位置</h3>
+            <div data-i18n-html="admin.help4Body">
+              <p>上传页在压缩图片<strong>之前</strong>读取原始照片的 EXIF 信息，提取拍摄时间与 GPS 坐标，并通过公开地理编码服务转换为地名。后台照片卡片显示时间与位置标签，点击可查看详情。</p>
+            </div>
+            <p class="help-hint" data-i18n="admin.help4Hint">若手机相机未开启定位权限，照片可能不含 GPS 信息，此时仍会显示上传时间。</p>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="modalNew" class="modal" hidden>
+    <div class="modal-backdrop" data-close="modalNew"></div>
+    <div class="modal-panel">
+      <div class="modal-head"><h3 data-i18n="admin.modalNewTitle">新建研究对象</h3><button class="icon-btn" data-close="modalNew" data-i18n-aria="common.close" aria-label="关闭">×</button></div>
+      <div class="modal-body">
+        <label class="field"><span data-i18n="admin.fieldId">研究对象编号（自动生成）</span><input id="newId" class="input" readonly></label>
+        <label class="field"><span data-i18n-html="admin.fieldName">姓名 / 称呼 <em>*</em></span><input id="newName" class="input" data-i18n-ph="admin.namePh" placeholder="例如：王奶奶" maxlength="40"></label>
+        <label class="field"><span data-i18n="admin.fieldNote">备注</span><input id="newNote" class="input" data-i18n-ph="admin.notePh" placeholder="选填，例如：社区 A 组" maxlength="80"></label>
+      </div>
+      <div class="modal-foot"><button class="btn btn-ghost" data-close="modalNew" data-i18n="common.cancel">取消</button><button id="btnCreate" class="btn btn-primary" data-i18n="admin.createBtn">创建并生成二维码</button></div>
+    </div>
+  </div>
+
+  <div id="modalQR" class="modal" hidden>
+    <div class="modal-backdrop" data-close="modalQR"></div>
+    <div class="modal-panel modal-panel-sm">
+      <div class="modal-head"><h3 id="qrTitle">研究对象二维码</h3><button class="icon-btn" data-close="modalQR" data-i18n-aria="common.close" aria-label="关闭">×</button></div>
+      <div class="modal-body qr-body">
+        <div class="qr-canvas-wrap"><canvas id="qrCanvas" width="300" height="300"></canvas></div>
+        <p id="qrSubject" class="qr-subject"></p>
+        <div class="qr-url-row"><input id="qrUrl" class="input" readonly><button id="btnCopyUrl" class="btn btn-ghost btn-sm" data-i18n="admin.copy">复制</button></div>
+        <p class="qr-tip" data-i18n="admin.qrTip">打印在手册上，受访者扫码即可进入拍照上传页面。</p>
+      </div>
+      <div class="modal-foot"><button id="btnDownloadQR" class="btn btn-primary" data-i18n="admin.downloadQR">下载二维码 PNG</button></div>
+    </div>
+  </div>
+
+  <div id="modalPhoto" class="modal modal-photo" hidden>
+    <div class="modal-backdrop" data-close="modalPhoto"></div>
+    <div class="modal-panel photo-panel">
+      <div class="photo-stage"><img id="photoFull" alt="手册照片" data-i18n-alt="admin.photoTitle"></div>
+      <div class="photo-side">
+        <div class="modal-head"><h3 data-i18n="admin.photoTitle">照片详情</h3><button class="icon-btn" data-close="modalPhoto" data-i18n-aria="common.close" aria-label="关闭">×</button></div>
+        <dl id="photoMeta" class="meta-list"></dl>
+        <div id="photoNote" class="photo-note"></div>
+        <button id="btnDeletePhoto" class="btn btn-danger" data-i18n="admin.btnDeletePhoto">删除这张照片</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modalConfirm" class="modal" hidden>
+    <div class="modal-backdrop" data-close="modalConfirm"></div>
+    <div class="modal-panel modal-panel-sm">
+      <div class="modal-head"><h3 data-i18n="admin.confirmTitle">请确认</h3><button class="icon-btn" data-close="modalConfirm" data-i18n-aria="common.close" aria-label="关闭">×</button></div>
+      <div class="modal-body"><p id="confirmText" class="confirm-text"></p></div>
+      <div class="modal-foot"><button class="btn btn-ghost" data-close="modalConfirm" data-i18n="common.cancel">取消</button><button id="btnConfirmOk" class="btn btn-danger" data-i18n="common.confirmDelete">确认删除</button></div>
+    </div>
+  </div>
+
+  <script src="js/i18n.js"></script>
+  <script src="vendor/qrcode.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/store.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

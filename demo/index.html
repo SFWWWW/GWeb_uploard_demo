@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n-tag="index.title">QR2WebUpload · 健康手册照片收集系统</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="landing-page">
+  <div class="landing-glow"></div>
+  <header class="landing-top">
+    <div class="brand-lockup">
+      <div class="brand-mark">Q2</div>
+      <div class="brand-text">QR2WebUpload</div>
+    </div>
+    <div class="header-actions">
+      <label class="lang-switch">
+        <span data-i18n="common.language">语言</span>
+        <select data-lang-select aria-label="Language"></select>
+      </label>
+      <a class="btn btn-ghost btn-sm" href="admin.html" data-i18n="index.adminBtn">进入管理后台</a>
+    </div>
+  </header>
+
+  <main class="landing-main">
+    <span class="pill" data-i18n="index.pill">老年人健康追踪手册数字化 · 演示版</span>
+    <h1 data-i18n="index.h1">扫码拍摄，照片自动归档</h1>
+    <p class="landing-lead" data-i18n="index.lead">
+      为每位研究对象生成专属二维码，手机扫码即可调用摄像头拍照或从相册选图。
+      照片自动附带拍摄时间与位置信息，并归档到管理后台对应的研究对象与日期下。
+    </p>
+
+    <div class="landing-cards">
+      <a class="landing-card" href="admin.html">
+        <div class="landing-card-icon icon-indigo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 14h3v3h-3zM20 14v.01M17 20v.01M20 20v.01"/></svg>
+        </div>
+        <div class="landing-card-body">
+          <h2 data-i18n="index.cardAdminTitle">管理后台</h2>
+          <p data-i18n="index.cardAdminDesc">创建研究对象、生成二维码、按日期查看照片档案。</p>
+          <span class="landing-link" data-i18n="index.cardAdminLink">打开后台 →</span>
+        </div>
+      </a>
+
+      <a class="landing-card" href="upload.html">
+        <div class="landing-card-icon icon-cyan">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z"/><circle cx="12" cy="13" r="3.5"/></svg>
+        </div>
+        <div class="landing-card-body">
+          <h2 data-i18n="index.cardUploadTitle">手机上传页</h2>
+          <p data-i18n="index.cardUploadDesc">扫码后免登录进入，拍照或选图后一键提交。</p>
+          <span class="landing-link" data-i18n="index.cardUploadLink">预览页面 →</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="landing-foot" data-i18n="index.foot">
+      静态站点 · 可直接部署至 GitHub Pages · 当前演示暂不包含 YOLO 识别流程
+    </div>
+  </main>
+
+  <script src="js/i18n.js"></script>
+</body>
+</html>
